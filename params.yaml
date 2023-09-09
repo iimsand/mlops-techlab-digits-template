@@ -1,3 +1,6 @@
+base:
+    log_level: INFO
+
 data:
     dataset_joblib: data/raw/data_digits.joblib
     features_path: data/processed/digits.csv
