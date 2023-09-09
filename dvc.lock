@@ -78,3 +78,76 @@ stages:
       hash: md5
       md5: cf226f15bc0f6a20b2ef65e4bafd2bc1
       size: 249755
+  train:
+    cmd: python src/train.py --config params.yaml
+    deps:
+    - path: data/train/train.csv
+      hash: md5
+      md5: cf226f15bc0f6a20b2ef65e4bafd2bc1
+      size: 249755
+    - path: src/train.py
+      hash: md5
+      md5: 20aaf971078d19ad942d91c6cb166e98
+      size: 1226
+    params:
+      params.yaml:
+        base:
+          log_level: INFO
+        data:
+          dataset_joblib: data/raw/data_digits.joblib
+          features_path: data/processed/digits.csv
+          test_size: 0.5
+          train_path: data/train/train.csv
+          test_path: data/test/test.csv
+        train:
+          svc_params:
+            kernel: linear
+            C: 0.025
+          model_path: models/model.joblib
+    outs:
+    - path: models/model.joblib
+      hash: md5
+      md5: 0a0f0db0d1a3d17ff20163c0948fb9c2
+      size: 224539
+  evaluate:
+    cmd: python src/evaluate.py --config params.yaml
+    deps:
+    - path: data/test/test.csv
+      hash: md5
+      md5: fdd9892e9f72c4e1b73bf3e7280f0728
+      size: 249861
+    - path: models/model.joblib
+      hash: md5
+      md5: 0a0f0db0d1a3d17ff20163c0948fb9c2
+      size: 224539
+    - path: src/evaluate.py
+      hash: md5
+      md5: f99e074faf476373eb1b2783190024b4
+      size: 1662
+    params:
+      params.yaml:
+        base:
+          log_level: INFO
+        data:
+          dataset_joblib: data/raw/data_digits.joblib
+          features_path: data/processed/digits.csv
+          test_size: 0.5
+          train_path: data/train/train.csv
+          test_path: data/test/test.csv
+        reports:
+          metrics_path: reports/metrics.json
+          cm_plot_path: reports/confusion_matrix.png
+        train:
+          svc_params:
+            kernel: linear
+            C: 0.025
+          model_path: models/model.joblib
+    outs:
+    - path: reports/confusion_matrix.png
+      hash: md5
+      md5: d214555f0a25ca550d63301d07929a75
+      size: 29916
+    - path: reports/metrics.json
+      hash: md5
+      md5: 634acac2b5e82db15c34a4bf7c1e3757
+      size: 32
