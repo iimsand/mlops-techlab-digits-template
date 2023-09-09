@@ -1,0 +1,56 @@
+stages:
+  data_load:
+    cmd: python src/data_load.py --config params.yaml
+    deps:
+    - src/data_load.py
+    params:
+    - base
+    - data
+    outs:
+    - data/raw/data_digits.joblib
+  data_prepare:
+    cmd: python src/data_prepare.py --config params.yaml
+    deps:
+    - data/raw/data_digits.joblib
+    - src/data_prepare.py
+    params:
+    - base
+    - data
+    outs:
+    - data/processed/digits.csv
+  data_split:
+    cmd: python src/data_split.py --config params.yaml
+    deps:
+    - src/data_split.py
+    - data/processed/digits.csv
+    params:
+    - base
+    - data
+    outs:
+    - data/train/train.csv
+    - data/test/test.csv
+  train:
+    cmd: python src/train.py --config params.yaml
+    deps:
+    - data/train/train.csv
+    - src/train.py
+    params:
+    - base
+    - data
+    - train
+    outs:
+    - models/model.joblib
+  evaluate:
+    cmd: python src/evaluate.py --config params.yaml
+    deps:
+    - data/test/test.csv
+    - models/model.joblib
+    - src/evaluate.py
+    params:
+    - base
+    - data
+    - reports
+    - train
+    outs:
+    - reports/confusion_matrix.png
+    - reports/metrics.json

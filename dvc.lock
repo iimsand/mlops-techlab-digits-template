@@ -1,0 +1,80 @@
+schema: '2.0'
+stages:
+  data_load:
+    cmd: python src/data_load.py --config params.yaml
+    deps:
+    - path: src/data_load.py
+      hash: md5
+      md5: cf614bb72ad4db6fdd9016d24a225ef4
+      size: 852
+    params:
+      params.yaml:
+        base:
+          log_level: INFO
+        data:
+          dataset_joblib: data/raw/data_digits.joblib
+          features_path: data/processed/digits.csv
+          test_size: 0.5
+          train_path: data/train/train.csv
+          test_path: data/test/test.csv
+    outs:
+    - path: data/raw/data_digits.joblib
+      hash: md5
+      md5: b0614ac8e26f35b60d202c3058e39396
+      size: 1857977
+  data_prepare:
+    cmd: python src/data_prepare.py --config params.yaml
+    deps:
+    - path: data/raw/data_digits.joblib
+      hash: md5
+      md5: b0614ac8e26f35b60d202c3058e39396
+      size: 1857977
+    - path: src/data_prepare.py
+      hash: md5
+      md5: 2ceb49e3d1da46101ceae6b4a36d4084
+      size: 1096
+    params:
+      params.yaml:
+        base:
+          log_level: INFO
+        data:
+          dataset_joblib: data/raw/data_digits.joblib
+          features_path: data/processed/digits.csv
+          test_size: 0.5
+          train_path: data/train/train.csv
+          test_path: data/test/test.csv
+    outs:
+    - path: data/processed/digits.csv
+      hash: md5
+      md5: 1fc784c85d4dccff5482fbee13f38cf8
+      size: 498969
+  data_split:
+    cmd: python src/data_split.py --config params.yaml
+    deps:
+    - path: data/processed/digits.csv
+      hash: md5
+      md5: 1fc784c85d4dccff5482fbee13f38cf8
+      size: 498969
+    - path: src/data_split.py
+      hash: md5
+      md5: ad8dd0a3da70c50d71093f95f85eb015
+      size: 1177
+    params:
+      params.yaml:
+        base:
+          log_level: INFO
+        data:
+          dataset_joblib: data/raw/data_digits.joblib
+          features_path: data/processed/digits.csv
+          test_size: 0.5
+          train_path: data/train/train.csv
+          test_path: data/test/test.csv
+    outs:
+    - path: data/test/test.csv
+      hash: md5
+      md5: fdd9892e9f72c4e1b73bf3e7280f0728
+      size: 249861
+    - path: data/train/train.csv
+      hash: md5
+      md5: cf226f15bc0f6a20b2ef65e4bafd2bc1
+      size: 249755
