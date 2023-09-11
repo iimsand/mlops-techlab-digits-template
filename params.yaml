@@ -1,0 +1,18 @@
+base:
+    log_level: INFO
+
+data:
+    dataset_joblib: data/raw/data_digits.joblib
+    features_path: data/processed/digits.csv
+    test_size: 0.5
+    train_path: data/train/train.csv
+    test_path: data/test/test.csv
+train:
+    svc_params:
+        kernel: linear
+        C: 0.025
+    model_path: models/model.joblib
+
+reports:
+    metrics_path: reports/metrics.json
+    cm_plot_path: reports/confusion_matrix.png
