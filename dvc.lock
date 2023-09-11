@@ -101,14 +101,14 @@ stages:
           test_path: data/test/test.csv
         train:
           svc_params:
-            kernel: linear
+            kernel: poly
             C: 0.025
           model_path: models/model.joblib
     outs:
     - path: models/model.joblib
       hash: md5
-      md5: 0a0f0db0d1a3d17ff20163c0948fb9c2
-      size: 224539
+      md5: 3f61e5d51ece482ba5ff691e272e3cf2
+      size: 500411
   evaluate:
     cmd: python src/evaluate.py --config params.yaml
     deps:
@@ -118,8 +118,8 @@ stages:
       size: 249861
     - path: models/model.joblib
       hash: md5
-      md5: 0a0f0db0d1a3d17ff20163c0948fb9c2
-      size: 224539
+      md5: 3f61e5d51ece482ba5ff691e272e3cf2
+      size: 500411
     - path: src/evaluate.py
       hash: md5
       md5: f99e074faf476373eb1b2783190024b4
@@ -139,15 +139,15 @@ stages:
           cm_plot_path: reports/confusion_matrix.png
         train:
           svc_params:
-            kernel: linear
+            kernel: poly
             C: 0.025
           model_path: models/model.joblib
     outs:
     - path: reports/confusion_matrix.png
       hash: md5
-      md5: d214555f0a25ca550d63301d07929a75
-      size: 29916
+      md5: 751b5d4be1c59b6dc79a13d49c1d0ae8
+      size: 30716
     - path: reports/metrics.json
       hash: md5
-      md5: 634acac2b5e82db15c34a4bf7c1e3757
+      md5: b83ad71421d09814ba4a52817e37ddc7
       size: 32
