@@ -9,7 +9,7 @@ data:
     test_path: data/test/test.csv
 train:
     svc_params:
-        kernel: linear
+        kernel: poly
         C: 0.025
     model_path: models/model.joblib
 
