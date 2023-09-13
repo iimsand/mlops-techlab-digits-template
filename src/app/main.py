@@ -36,8 +36,19 @@ class Request(BaseModel):
 @app.post("/predict")
 async def predict(request_data: Request = Body(..., example={})):
     input_data = json.loads(request_data.model_dump_json())
+
+    # save_as_img(input_data)
+
     predicted = model.predict(input_data["data"])
     return predicted.tolist()
+
+def save_as_img(input_data):
+     import numpy as np
+     import matplotlib.pyplot as plt
+
+     data_arr = np.asarray(input_data["data"])
+     input_image = data_arr.reshape(8, 8)
+     plt.imsave("input_image.png", input_image)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8888)
