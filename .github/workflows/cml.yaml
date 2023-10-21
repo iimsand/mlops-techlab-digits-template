@@ -23,6 +23,8 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          cml pr --skip-ci .
+          
           echo "## Metrics" >> report.md
 
           git fetch --prune
@@ -30,10 +32,11 @@ jobs:
 
           echo "### Diff" >> report.md
           dvc metrics diff main --md >> report.md
-
+          echo "#### Params" >> report.md
+          dvc params diff main --md >> report.md
+          
           echo "## Plots" >> report.md
           echo "### Class confusions" >> report.md
-          echo '![](./reports/confusion_matrix.png "Confusion Matrix")' >> report.md          
-
-          cml pr create .
-          cml comment update report.md
+          echo '![](./reports/confusion_matrix.png "Confusion Matrix")' >> report.md
+          
+          cml comment create --target=pr --update report.md
