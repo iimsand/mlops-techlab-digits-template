@@ -25,8 +25,7 @@ def app(config_path: Text) -> any:
     model = joblib.load(config["train"]["model_path"])
 
     def preprocess(data):
-        img = resize(data, (8, 8), preserve_range=True)
-        img = np.round(img / 255 * 16)
+        img = resize(data, (8, 8))
         return [img.reshape(64)]
 
     def predict(data):
