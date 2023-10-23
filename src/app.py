@@ -7,6 +7,7 @@ import joblib
 from skimage.transform import resize
 import numpy as np
 
+np.set_printoptions(suppress=True)
 
 def app(config_path: Text) -> any:
     """A sample application to test a trained model.
@@ -18,7 +19,7 @@ def app(config_path: Text) -> any:
         config = yaml.safe_load(conf_file)
 
     logger = get_logger(
-        'evaluate_model', log_level=config['base']['log_level'])
+        'app', log_level=config['base']['log_level'])
 
     logger.info('Load model')
     model = joblib.load(config["train"]["model_path"])
