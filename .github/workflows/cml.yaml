@@ -5,6 +5,7 @@ on:
       - "src/**"
       - "params.yaml"
       - "dvc.*"
+      - ".github/workflows/cml.yaml"
 jobs:
   train-and-report:
     runs-on: ubuntu-latest
@@ -14,29 +15,36 @@ jobs:
           node-version: 16
       - uses: iterative/setup-cml@v1
       - uses: actions/checkout@v3
-      - name: Train model
+
+      - name: Install python packages
         run: |
           cat requirements.txt | grep -v -e jupyter > ci_requirements.txt
           pip install -r ci_requirements.txt
+          rm ci_requirements.txt
+
+      - name: Run DVC pipeline
+        run: |
           PYTHONPATH=$PWD dvc repro
+      
       - name: Create CML report
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cml pr --skip-ci .
-          
-          echo "## Metrics" >> report.md
+          cml ci --fetch-depth=0
 
-          git fetch --prune
+          cml pr create .
+
+          echo "## Metrics" >> report.md
           dvc metrics show --md >> report.md
 
           echo "### Diff" >> report.md
-          dvc metrics diff main --md >> report.md
+          dvc metrics diff main --all --md >> report.md
+
           echo "#### Params" >> report.md
           dvc params diff main --md >> report.md
-          
+
           echo "## Plots" >> report.md
           echo "### Class confusions" >> report.md
           echo '![](./reports/confusion_matrix.png "Confusion Matrix")' >> report.md
-          
-          cml comment create --target=pr --update report.md
+
+          cml comment create report.md
