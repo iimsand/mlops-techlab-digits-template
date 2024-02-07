@@ -6,4 +6,4 @@ dvc==3.42.0
 jupyterlab==4.0.3
 
 gradio==3.48.0
-scikit-image==0.22.0
+scikit-image==0.21.0
