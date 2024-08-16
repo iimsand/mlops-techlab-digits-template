@@ -8,7 +8,7 @@ on:
       - ".github/workflows/cml.yaml"
 jobs:
   train-and-report:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/setup-node@v3
         with:
