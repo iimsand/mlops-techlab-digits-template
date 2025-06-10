@@ -1,6 +1,8 @@
 name: CML & DVC
 on:
   push:
+    branches-ignore:
+      - main
     paths:
       - "src/**"
       - "params.yaml"
@@ -13,8 +15,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - uses: iterative/setup-cml@v1
       - uses: actions/checkout@v3
+      - uses: iterative/setup-cml@v2
+        with:
+          version: 'v0.20.6'
 
       - name: Install python packages
         run: |
@@ -32,8 +36,6 @@ jobs:
         run: |
           cml ci --fetch-depth=0
 
-          cml pr create .
-
           echo "## Metrics" >> report.md
           dvc metrics show --md >> report.md
 
@@ -46,5 +48,8 @@ jobs:
           echo "## Plots" >> report.md
           echo "### Class confusions" >> report.md
           echo '![](./reports/confusion_matrix.png "Confusion Matrix")' >> report.md
+
+          echo "Report created on $(date -u)" >> report.md
+          cml pr create .
 
           cml comment create report.md
